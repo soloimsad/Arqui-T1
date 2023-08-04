@@ -38,7 +38,7 @@ def binary_to_i3e754(number):
     mantisa_binaria = (entero_binario + decimal_binario)[:23].ljust(23, '0')
 
     
-    ieee754_binario = signo + exponente_binario + mantisa_binaria
+    return signo + exponente_binario + mantisa_binaria
 
 def binary(number):
     if number < 0:
