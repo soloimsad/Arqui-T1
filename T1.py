@@ -16,7 +16,7 @@ def binary(number):
         dPart += str(bit)
         d -= bit
         if d == 0:
-            break
+            break skf
 
     return f"{sig}{binaryPart}.{dPart}"
 
