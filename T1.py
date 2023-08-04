@@ -1,6 +1,33 @@
 #VARIABLES GLOBALES
 count=0 #contador de operaciones suma
 
+def binario_a_ieee754(numero):
+    if numero > 0:
+        ss = "0"
+    else:
+        ss = "1"
+    numero = str(abs(numero))
+    cont = 0
+    pos_punto = 0
+    for char in numero:
+        if char == ".":
+            pos_punto = cont
+            e = pos_punto - 1
+        cont += 1
+    nuevo_numero = numero[0] + "." + numero[1:pos_punto] + numero[pos_punto+1:]
+    mantissa = nuevo_numero[2:]
+    while len(mantissa) < 23:
+        mantissa += "0"
+    ee = e + 127
+    ee = str(binary(ee))
+    numero_ieee754 = ss + ee + mantissa
+    print(numero_ieee754)
+    return None
+
+        
+
+
+
 def binary_to_i3e754(number):
     if (binario >= 0):
         signo = 0
@@ -75,5 +102,4 @@ with open('operaciones.txt','r') as archivo:
     for linea in archivo:
         float_to_binary(linea)
 
-print("hola")
-print("test2")
+binario_a_ieee754(110011.001)
