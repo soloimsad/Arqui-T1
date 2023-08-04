@@ -74,4 +74,5 @@ def float_to_binary(linea):
 with open('operaciones.txt','r') as archivo:
     for linea in archivo:
         float_to_binary(linea)
-        
+
+print("hola")
