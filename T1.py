@@ -76,3 +76,4 @@ with open('operaciones.txt','r') as archivo:
         float_to_binary(linea)
 
 print("hola")
+print("test2")
