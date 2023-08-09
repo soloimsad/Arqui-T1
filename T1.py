@@ -1,6 +1,39 @@
 #VARIABLES GLOBALES
 count=0 #contador de operaciones suma
 
+def binario_int(num):
+    decimal =0
+    largo = len(num)
+    for i, digito in enumerate(num):
+        if digito=="1":
+            exponente = largo- i - 1
+            decimal += 2 ** exponente
+    return decimal
+
+
+def sum(num1, num2):
+    m1= num1[9:]
+    m2= num2[9:]
+    s1= num1[:1]
+    s2= num2[:1]
+    #ajustar cifras significativas
+    e1= num1[1:9]
+    e2= num2[1:9]
+    compare= binario_int(e1)-binario_int(e2)
+    if (compare > 0): #caso en el que e1 mayor que e2
+        m2="1"+m2
+        m2= "0,"+"0"*(compare-1)+m2
+        m1="1,"+m1
+    else:
+        m1="1"+m1
+        m1="0,"+"0"*abs(compare-1)+m1
+        m2="1,"+m2
+    
+    #proceso de suma
+    
+
+
+
 def binario_a_ieee754(numero):
     if float(numero) > 0:
         ss = "0"
@@ -21,7 +54,7 @@ def binario_a_ieee754(numero):
     ee = e + 127
     ee = str(decimal_a_binario(ee))
     numero_ieee754 = ss + ee + mantissa
-    print(numero_ieee754)
+   
     lista1 = [ss,ee,mantissa]
     return lista1
 
@@ -160,7 +193,6 @@ def float_to_binary(linea):
     Num2= Num2.replace("\n","")
     Num1= binary(float(Num1))
     Num2= binary(float(Num2))
-    print(Num1 +"           " + Num2)
     return 
 """
 
@@ -177,3 +209,4 @@ b = decimal_a_binario(-118.625)
 print(b)
 c = binario_a_ieee754(b)
 print(c)
+print(sum("01000010100101010000000000000000","01000000011100000000000000000000"))
