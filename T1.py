@@ -10,6 +10,14 @@ def binario_int(num):
             decimal += 2 ** exponente
     return decimal
 
+def cortar_mantisa(num):
+    slicer = 0
+    for i in reversed(num):
+        if num[i]=="0":
+            slicer+=1  
+        else:
+            break
+    return num[:len(num)-slicer]
 
 def sum(num1, num2):
     m1= num1[9:]
@@ -22,14 +30,15 @@ def sum(num1, num2):
     compare= binario_int(e1)-binario_int(e2)
     if (compare > 0): #caso en el que e1 mayor que e2
         m2="1"+m2
-        m2= "0,"+"0"*(compare-1)+m2
-        m1="1,"+m1
+        m2= "0."+"0"*(compare-1)+m2
+        m1="1."+m1
     else:
         m1="1"+m1
-        m1="0,"+"0"*abs(compare-1)+m1
-        m2="1,"+m2
+        m1="0."+"0"*abs(compare-1)+m1
+        m2="1."+m2
     
     #proceso de suma
+    print(cortar_mantisa(m1),len(m2))
     
 
 
