@@ -2,11 +2,11 @@
 count=0 #contador de operaciones suma
 
 def binario_a_ieee754(numero):
-    if numero > 0:
+    if float(numero) > 0:
         ss = "0"
     else:
         ss = "1"
-    numero = str(abs(numero))
+        numero = numero[1:]
     cont = 0
     pos_punto = 0
     for char in numero:
@@ -19,10 +19,11 @@ def binario_a_ieee754(numero):
     while len(mantissa) < 23:
         mantissa += "0"
     ee = e + 127
-    ee = str(binary(ee))
+    ee = str(decimal_a_binario(ee))
     numero_ieee754 = ss + ee + mantissa
     print(numero_ieee754)
-    return None
+    lista1 = [ss,ee,mantissa]
+    return lista1
 
         
 
@@ -67,6 +68,42 @@ def binary_to_i3e754(number):
     
     return signo + exponente_binario + mantisa_binaria
 
+
+def decimal_a_binario(numero):
+    binario = ""
+    if numero < 0:
+        signo = "-"
+        numero = abs(numero)
+    else:
+        signo = ""
+    
+    parte_entera = int(numero)
+    parte_decimal = numero - parte_entera
+    while parte_entera > 0:
+        if parte_entera % 2 != 0:
+            binario = "1" + binario
+        else:
+            binario = "0" + binario
+        parte_entera = parte_entera // 2
+    if parte_decimal != 0:
+        p_d_b = ""
+        cont_digitos = 0
+        while cont_digitos < len(str(parte_decimal))+1:
+            parte_decimal = parte_decimal * 2
+            if parte_decimal >= 1:
+                p_d_b += "1"
+                parte_decimal -= 1
+            else:
+                p_d_b += "0"
+            cont_digitos += 1
+        
+        numero_binario = signo + binario + "." + p_d_b
+        return (numero_binario)
+    else:
+        numero_binario = signo +  binario
+        return numero_binario
+
+
 def binary(number):
     if number < 0:
         sig= "-"
@@ -87,6 +124,7 @@ def binary(number):
 
     return f"{sig}{binaryPart}.{dPart}"
 
+
 def float_to_binary(linea):
     pos = linea.index(";")
     Num1= linea[:pos]
@@ -100,6 +138,14 @@ def float_to_binary(linea):
 
 with open('operaciones.txt','r') as archivo:
     for linea in archivo:
-        float_to_binary(linea)
+        linea = linea.strip().split(";")
+        num1 = decimal_a_binario(float(linea[0]))
+        num2 = decimal_a_binario(float(linea[1]))
+        print(str(num1) + "      " + str(num2))
+        #float_to_binary(linea)
 
-binario_a_ieee754(110011.001)
+
+b = decimal_a_binario(-118.625)
+print(b)
+c = binario_a_ieee754(b)
+print(c)
