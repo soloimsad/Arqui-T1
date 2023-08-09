@@ -24,6 +24,7 @@ def sum(num1, num2):
     m2= num2[9:]
     s1= num1[:1]
     s2= num2[:1]
+    
     #ajustar cifras significativas
     e1= num1[1:9]
     e2= num2[1:9]
@@ -214,5 +215,5 @@ with open('operaciones.txt','r') as archivo:
         #float_to_binary(linea)
 
 b = decimal_a_binario(-118.625)
-
+sum("01000001001011100000000000000000","01000001101011100000000000000000")
 c = binario_a_ieee754(b)
