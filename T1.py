@@ -19,26 +19,41 @@ def cortar_mantisa(num):
             break
     return num[:len(num)-slicer]
 
+def buscar_punto(num):
+
+    cont = 0
+    pos_punto = 0
+    for char in num:
+        if char == ".":
+            pos_punto = cont
+        cont += 1    
+    
+    return pos_punto 
+
 def sum(num1, num2):
     m1= num1[9:]
     m2= num2[9:]
     e1= num1[1:9]
     e2= num2[1:9]
+    sig1= num1[:1]
+    sig2= num2[:1]
     compare= binario_int(e1)-binario_int(e2)
-    if (compare > 0): #caso en el que e1 mayor que e2
-        m2="1"+m2
-        m2= "0."+ m2
-        m1="1."+ m1
-    else:
+    if (compare > 0): # e1 mayor a e1, por lo tanto se debe mover e2 a la izquierda
+        
+        m2= compare*"0" + "." + "1" + m2
+        m1="1."+m1
 
-        m1= "1" + m1
-        m1= "0."+ m1
-        m2= "1."+ m2
+    else: #el mayor es e1 e2 x lo tanto se debe mover el e1 a la izquierda compare veces
+    
+        m1= abs(compare)*"0" + "." + "1" + m1
+        m2= "1." + m2
+
+
     max_mantisa = max(len(cortar_mantisa(m1)),len(cortar_mantisa(m2)))
 
     m1 = cortar_mantisa(m1) +"0"*(-len(cortar_mantisa(m1))+max_mantisa)
     m2 = cortar_mantisa(m2) +"0"*(-len(cortar_mantisa(m2))+max_mantisa)
-    print(m1,m2)
+
     result= ''
     carry = 0
 
@@ -50,7 +65,6 @@ def sum(num1, num2):
             r += 1 if m2[i] == '1' else 0
             result = ('1' if r % 2 == 1 else '0') + result
         
-            # Compute the carry.
             carry = 0 if r < 2 else 1
         else:
             result =  "." + result 
@@ -58,7 +72,19 @@ def sum(num1, num2):
     if carry != 0:
         result = '1' + result
 
-    return result
+    pos_punto = buscar_punto(result) # nos retorna la pos del punto
+
+    result = result[0] + "." + result[1:pos_punto] + result[pos_punto+1:] 
+
+    e = pos_punto + 127
+    e = decimal_a_binario(e)
+    mantissa = result[2:]
+    while len(mantissa) < 23:
+        mantissa += "0"
+    
+    final = sig1 + e + mantissa
+
+    return final 
 
 
 
@@ -68,67 +94,20 @@ def binario_a_ieee754(numero):
     else:
         ss = "1"
         numero = numero[1:]
-    cont = 0
-    pos_punto = 0
-    for char in numero:
-        if char == ".":
-            pos_punto = cont
-            e = pos_punto - 1
-        cont += 1
+
+    pos_punto=buscar_punto(numero)
+    e= pos_punto - 1
     nuevo_numero = numero[0] + "." + numero[1:pos_punto] + numero[pos_punto+1:]
     mantissa = nuevo_numero[2:]
     while len(mantissa) < 23:
         mantissa += "0"
+    
     ee = e + 127
     ee = str(decimal_a_binario(ee))
     numero_ieee754 = ss + ee + mantissa
-   
-    lista1 = [ss,ee,mantissa]
-    return lista1
+    return numero_ieee754
 
         
-
-
-"""
-def binary_to_i3e754(number):
-    if (binario >= 0):
-        signo = 0
-    else:
-        signo = 1
-
-    binario = abs(binario)
-
-   
-    parte_entera, parte_decimal = str(binario).split(".")
-    parte_entera = int(parte_entera)
-    parte_decimal = int(parte_decimal)
-
-   
-    entero_binario = ""
-    while parte_entera > 0:
-        entero_binario = str(parte_entera % 2) + entero_binario
-        parte_entera //= 2
-
-   
-    decimal_binario = ""
-    while parte_decimal > 0:
-        parte_decimal *= 2
-        decimal_binario += str(int(parte_decimal))
-        parte_decimal -= int(parte_decimal)
-
-  
-    numero_binario = entero_binario + "." + decimal_binario
-
-   
-    exponente = 127 + len(entero_binario) - 1
-    exponente_binario = format(exponente, '08b')
-
- 
-    mantisa_binaria = (entero_binario + decimal_binario)[:23].ljust(23, '0')
-
-    
-    return signo + exponente_binario + mantisa_binaria
-"""
 
 def decimal_a_binario(numero):
     binario = ""
@@ -164,27 +143,7 @@ def decimal_a_binario(numero):
         numero_binario = signo +  binario
         return numero_binario
 
-"""
-def binary(number):
-    if number < 0:
-        sig= "-"
-        number=abs(number)
-    else:
-        sig=""
-    main = int(number)
-    d = number - main
-    binaryPart= bin(main)[2:]
-    dPart= ""
-    for _ in range(23):
-        d *= 2
-        bit= int(d)
-        dPart += str(bit)
-        d -= bit
-        if d == 0:
-            break 
 
-    return f"{sig}{binaryPart}.{dPart}"
-"""
 def binario_int(num):
     decimal =0
     largo = len(num)
@@ -207,25 +166,29 @@ def ieee754_a_decimal(numero):
     numero2 = (2**exponente) * sum * (-1)**int(s1)
     return numero2
 
-"""
-def float_to_binary(linea):
-    pos = linea.index(";")
-    Num1= linea[:pos]
-    Num2= linea[pos+1:]
-    Num2= Num2.replace("\n","")
-    Num1= binary(float(Num1))
-    Num2= binary(float(Num2))
-    return 
-"""
+
 
 with open('operaciones.txt','r') as archivo:
+
     for linea in archivo:
         linea = linea.strip().split(";")
-        num1 = decimal_a_binario(float(linea[0]))
-        num2 = decimal_a_binario(float(linea[1]))
-        
+        temp1 = float(linea[0])
+        temp2 = float(linea[1])
+
+        if ((temp1 >= 0) and (temp2 >= 0)) or (((temp1 <= 0) and (temp2 <= 0))):
+
+            num1 = decimal_a_binario(float(linea[0]))
+            num2 = decimal_a_binario(float(linea[1]))
+            num1 = binario_a_ieee754(num1)
+            num2 = binario_a_ieee754(num2)
+            resultado = sum(num1,num2)
+            print(resultado[:32])
+
+        else:
+            print("BUenas\n")
+
         #float_to_binary(linea)
 
-b = decimal_a_binario(-118.625)
-c = binario_a_ieee754(b)
-print(sum("00111111110000000000000000000000000000000","01000000010100000000000000000000000000000"))
+#b = decimal_a_binario(-118.625)
+#c = binario_a_ieee754(b)
+#print(sum("00111111110000000000000000000000000000000","01000000010100000000000000000000000000000"))
