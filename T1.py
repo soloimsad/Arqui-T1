@@ -9,7 +9,7 @@ def binario_int(num):
             exponente = largo- i - 1
             decimal += 2 ** exponente
     return decimal
-
+"""
 def cortar_mantisa(num):
     slicer = 0
     for i in range(len(num) - 1, -1, -1):
@@ -40,7 +40,50 @@ def sum(num1, num2):
     
     #proceso de suma
     print(cortar_mantisa(m1),len(m2))
-  
+"""
+def cortar_mantisa(num):
+    slicer = 0
+    for i in range(len(num) - 1, -1, -1):
+        if num[i] == "0":
+            slicer += 1
+        else:
+            break
+    return num[:len(num)-slicer]
+
+def sum(num1, num2):
+    m1= num1[9:]
+    m2= num2[9:]
+    e1= num1[1:9]
+    e2= num2[1:9]
+    compare= binario_int(e1)-binario_int(e2)
+    print("buenas")
+    if (compare > 0): #caso en el que e1 mayor que e2
+        print("buenas2")
+        m2="1"+m2
+        m2= "0."+"0" * abs(compare-1)+ m2
+        m1="1."+ m1
+    else:
+        print("malas")
+        m1= "1" + m1
+        m1= "0."+ "0" * abs(compare-1)+m1
+        m2= "1."+ m2
+    max_mantisa = max(len(cortar_mantisa(m1)),len(cortar_mantisa(m2)))
+
+    m1 = cortar_mantisa(m1) +"0"*(-len(cortar_mantisa(m1))+max_mantisa)
+    m2 = cortar_mantisa(m2) +"0"*(-len(cortar_mantisa(m2))+max_mantisa)
+    print(m1,m2)
+    result= []
+    carry = 0
+
+    for i in range(max_mantisa - 1, -1, -1):
+        bit = int(num1[i]) + int(num2[i]) + carry
+        result.insert(0, str(bit % 2))
+        carry = bit // 2
+
+    if carry:
+        result.insert(0, str(carry))
+
+    return ''.join(result)
 
 
 
@@ -176,24 +219,18 @@ def binario_int(num):
             decimal += 2 ** exponente
     return decimal
 
-
-def sum(num1, num2):
-    m1= num1[9:]
-    m2= num2[9:]
-    s1= num1[:1]
-    s2= num2[:1]
-    #ajustar cifras significativas
-    e1= num1[1:9]
-    e2= num2[1:9]
-    compare= binario_int(e1)-binario_int(e2)
-    if (compare > 0): #caso en el que e1 mayor que e2
-        m2="1"+m2
-        m2= "0,"+"0" * (compare-1)+m2
-        m1="1,"+m1
-    else:
-        m1="1"+m1
-        m1="0,"+"0" * abs(compare-1)+m1
-        m2="1,"+m2
+def ieee754_a_decimal(numero):
+    m1 = numero[9:]
+    s1 = numero[:1]
+    e1 = numero[1:9]
+    cont = 1
+    sum = 1
+    while cont < len(m1) + 1:
+        sum += int(m1[cont-1]) * 1/(2**cont)
+        cont += 1
+    exponente = binario_int(e1) - 127
+    numero2 = (2**exponente) * sum * (-1)**int(s1)
+    return numero2
 
 """
 def float_to_binary(linea):
@@ -215,5 +252,5 @@ with open('operaciones.txt','r') as archivo:
         #float_to_binary(linea)
 
 b = decimal_a_binario(-118.625)
-sum("01000001001011100000000000000000","01000001101011100000000000000000")
 c = binario_a_ieee754(b)
+print(sum("00111111110000000000000000000000000000000","01000000010100000000000000000000000000000"))
