@@ -28,7 +28,7 @@ def binario_a_ieee754(numero):
         
 
 
-
+"""
 def binary_to_i3e754(number):
     if (binario >= 0):
         signo = 0
@@ -67,7 +67,7 @@ def binary_to_i3e754(number):
 
     
     return signo + exponente_binario + mantisa_binaria
-
+"""
 
 def decimal_a_binario(numero):
     binario = ""
@@ -103,7 +103,7 @@ def decimal_a_binario(numero):
         numero_binario = signo +  binario
         return numero_binario
 
-
+"""
 def binary(number):
     if number < 0:
         sig= "-"
@@ -123,8 +123,36 @@ def binary(number):
             break 
 
     return f"{sig}{binaryPart}.{dPart}"
+"""
+def binario_int(num):
+    decimal =0
+    largo = len(num)
+    for i, digito in enumerate(num):
+        if digito=="1":
+            exponente = largo- i - 1
+            decimal += 2 ** exponente
+    return decimal
 
 
+def sum(num1, num2):
+    m1= num1[9:]
+    m2= num2[9:]
+    s1= num1[:1]
+    s2= num2[:1]
+    #ajustar cifras significativas
+    e1= num1[1:9]
+    e2= num2[1:9]
+    compare= binario_int(e1)-binario_int(e2)
+    if (compare > 0): #caso en el que e1 mayor que e2
+        m2="1"+m2
+        m2= "0,"+"0" * (compare-1)+m2
+        m1="1,"+m1
+    else:
+        m1="1"+m1
+        m1="0,"+"0" * abs(compare-1)+m1
+        m2="1,"+m2
+
+"""
 def float_to_binary(linea):
     pos = linea.index(";")
     Num1= linea[:pos]
@@ -134,7 +162,7 @@ def float_to_binary(linea):
     Num2= binary(float(Num2))
     print(Num1 +"           " + Num2)
     return 
-
+"""
 
 with open('operaciones.txt','r') as archivo:
     for linea in archivo:
