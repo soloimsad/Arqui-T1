@@ -12,9 +12,9 @@ def binario_int(num):
 
 def cortar_mantisa(num):
     slicer = 0
-    for i in reversed(num):
-        if num[i]=="0":
-            slicer+=1  
+    for i in range(len(num) - 1, -1, -1):
+        if num[i] == "0":
+            slicer += 1
         else:
             break
     return num[:len(num)-slicer]
@@ -39,7 +39,7 @@ def sum(num1, num2):
     
     #proceso de suma
     print(cortar_mantisa(m1),len(m2))
-    
+  
 
 
 
@@ -210,12 +210,9 @@ with open('operaciones.txt','r') as archivo:
         linea = linea.strip().split(";")
         num1 = decimal_a_binario(float(linea[0]))
         num2 = decimal_a_binario(float(linea[1]))
-        print(str(num1) + "      " + str(num2))
+        
         #float_to_binary(linea)
 
-
 b = decimal_a_binario(-118.625)
-print(b)
+
 c = binario_a_ieee754(b)
-print(c)
-print(sum("01000010100101010000000000000000","01000000011100000000000000000000"))
