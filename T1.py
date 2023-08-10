@@ -20,7 +20,6 @@ def cortar_mantisa(num):
     return num[:len(num)-slicer]
 
 def buscar_punto(num):
-
     cont = 0
     pos_punto = 0
     for char in num:
@@ -95,8 +94,11 @@ def binario_a_ieee754(numero):
         ss = "1"
         numero = numero[1:]
 
-    pos_punto=buscar_punto(numero)
-    e= pos_punto - 1
+    pos_punto = buscar_punto(numero)
+    if pos_punto == 0:
+        pos_punto = len(numero)
+    e = pos_punto - 1
+
     nuevo_numero = numero[0] + "." + numero[1:pos_punto] + numero[pos_punto+1:]
     mantissa = nuevo_numero[2:]
     while len(mantissa) < 23:
@@ -104,7 +106,13 @@ def binario_a_ieee754(numero):
     
     ee = e + 127
     ee = str(decimal_a_binario(ee))
+    while len(ee)< 8:
+        ee+="0"
+    
     numero_ieee754 = ss + ee + mantissa
+    
+    if (len(numero_ieee754)>32):
+        numero_ieee754= numero_ieee754[:32]
     return numero_ieee754
 
         
@@ -121,14 +129,14 @@ def decimal_a_binario(numero):
     parte_decimal = numero - parte_entera
     while parte_entera > 0:
         if parte_entera % 2 != 0:
-            binario = "1" + binario
+            binario = "1" + binario 
         else:
-            binario = "0" + binario
+            binario = "0" + binario 
         parte_entera = parte_entera // 2
     if parte_decimal != 0:
         p_d_b = ""
         cont_digitos = 0
-        while cont_digitos < len(str(parte_decimal))+1:
+        while cont_digitos < 24:
             parte_decimal = parte_decimal * 2
             if parte_decimal >= 1:
                 p_d_b += "1"
@@ -177,18 +185,20 @@ with open('operaciones.txt','r') as archivo:
 
         if ((temp1 >= 0) and (temp2 >= 0)) or (((temp1 <= 0) and (temp2 <= 0))):
 
-            num1 = decimal_a_binario(float(linea[0]))
-            num2 = decimal_a_binario(float(linea[1]))
+            num1 = decimal_a_binario(temp1)
+            num2 = decimal_a_binario(temp2)
+            
             num1 = binario_a_ieee754(num1)
             num2 = binario_a_ieee754(num2)
+            
+            print("Numero 1", num1[:1],num1[1:9],num1[9:],"Numero 2",num2[:1],num2[1:9],num2[9:],"Largo ",len(num2))
             resultado = sum(num1,num2)
-            print(resultado[:32])
+            count += 1
+            #print(resultado)
 
         else:
-            print("BUenas\n")
+            print("Buenas")
 
         #float_to_binary(linea)
 
-#b = decimal_a_binario(-118.625)
-#c = binario_a_ieee754(b)
-#print(sum("00111111110000000000000000000000000000000","01000000010100000000000000000000000000000"))
+
