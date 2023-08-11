@@ -2,6 +2,7 @@
 
 count=0 #contador de operaciones suma
 from decimal import Decimal
+import re
 
 
 def binario_int(num):
@@ -251,33 +252,40 @@ with open('operaciones.txt','r') as archivo:
 
     for linea in archivo:
         linea = linea.strip().split(";")
-        temp1 = float(linea[0])
-        temp2 = float(linea[1])
-
         
-        num1 = decimal_a_binario(temp1)
-        num2 = decimal_a_binario(temp2)
-        num1 = binario_a_ieee754(num1)
-        num2 = binario_a_ieee754(num2)
+        if(len(linea)>=2):
+            temp1 = (linea[0])
+            temp2 = (linea[1])
+            if(temp1!="" and temp2!= ""):
 
-        if ((temp1 >= 0) and (temp2 >= 0)) or (((temp1 <= 0) and (temp2 <= 0))):
+                temp1 = float(linea[0])
+                temp2 = float(linea[1])
+                num1 = decimal_a_binario(temp1)
+                num2 = decimal_a_binario(temp2)
+                num1 = binario_a_ieee754(num1)
+                num2 = binario_a_ieee754(num2)
 
-            resultado = sum(num1,num2)
-            count += 1
-            string_salida = str(round(ieee754_a_decimal(resultado),3)) + "/" + resultado[:1]+" "+resultado[1:9]+" "+resultado[9:]
-            lista_escribir.append(string_salida)
-                    
+                if ((temp1 >= 0) and (temp2 >= 0)) or (((temp1 <= 0) and (temp2 <= 0))):
+
+                    resultado = sum(num1,num2)
+                    count += 1
+                    string_salida = str(round(ieee754_a_decimal(resultado),3)) + "/" + resultado[:1]+" "+resultado[1:9]+" "+resultado[9:]
+                    lista_escribir.append(string_salida)
+                                
+                else:
+
+                    fallas+=1
+                    string_salida= str(round(temp1,3)) + "/" + num1 + ";" + str(round(temp2,3)) + "/" + num2 
+                    lista_escribir.append(string_salida)
+            else:
+                fallas+=1
+
         else:
-
             fallas+=1
-            string_salida= str(round(temp1,3)) + "/" + num1 + ";" + str(round(temp2,3)) + "/" + num2 
-            lista_escribir.append(string_salida)
-
 
 with open('resultados.txt','w') as archivo:
    for i in lista_escribir:
        archivo.write(i+"\n")
-
 
 if(count+fallas==0):
     print("No se pudieron procesar lineas")
