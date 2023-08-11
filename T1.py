@@ -126,20 +126,25 @@ def binario_a_ieee754(numero):
     
     cont = 0
     aux = numero[0]
+    #print(float(numero))
 
     if float(numero) > 0:
         ss = "0"
     else:
         ss = "1"
+        #print("Buenas")
+        
         numero = numero[1:]
+        #print(numero)
 
     pos_punto = buscar_punto(numero)
 
-    if pos_punto == 0:
+    if pos_punto == 0: #cuando no hay punto
         pos_punto = len(numero)
     e = pos_punto - 1
     
-    if (aux == "0"):       #busca el primer 1
+    #print(aux)
+    if (aux == "0" or aux=="-"):       #busca el primer 1
         cont= buscar_uno(numero)
         e = -cont-1
    
@@ -172,7 +177,7 @@ def binario_a_ieee754(numero):
         numero_ieee754= numero_ieee754[:32]
 
     
-    #print(numero_ieee754[:1],numero_ieee754[1:9],numero_ieee754[9:])
+    print(numero_ieee754[:1],numero_ieee754[1:9],numero_ieee754[9:])
 
     return numero_ieee754
         
@@ -219,6 +224,7 @@ def decimal_a_binario(numero):
         
        
         numero_binario = signo + binario + "." + p_d_b
+    
         return (numero_binario)
     
     else:
