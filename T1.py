@@ -201,7 +201,12 @@ def decimal_a_binario(numero):
         p_d_b = ""
         cont_digitos = 0
         
-        while cont_digitos < 23:
+        if aux != 0:
+            n = 0
+        else:
+            n = 10
+
+        while cont_digitos < 23 + n:
             parte_decimal = parte_decimal * 2
             parte_decimal=round(parte_decimal,5)
         
@@ -212,26 +217,9 @@ def decimal_a_binario(numero):
                 p_d_b += "0"
             cont_digitos += 1
         
-        if aux != 0:
        
-            numero_binario = signo + binario + "." + p_d_b
-            return (numero_binario)
-        else:
-            #en este caso le agrego mas numeros a la mantissa para que no falten numeros al shiftear
-            while cont_digitos < 23 + 10:
-                parte_decimal = parte_decimal * 2
-                parte_decimal=round(parte_decimal,5)
-        
-                if parte_decimal >= 1:
-                    p_d_b += "1"
-                    parte_decimal -= 1
-                else:
-                    p_d_b += "0"
-                cont_digitos += 1
-            numero_binario = signo + binario + "." + p_d_b
-            
-            return (numero_binario)
-
+        numero_binario = signo + binario + "." + p_d_b
+        return (numero_binario)
     
     else:
         numero_binario = signo +  binario
@@ -301,7 +289,7 @@ with open('resultados.txt','w') as archivo:
    for i in lista_escribir:
        archivo.write(i+"\n")
 
-
+"""
 if(count+fallas==0):
     print("No se pudieron procesar lineas")
 
@@ -319,6 +307,6 @@ if (fallas==0):
 
 else:
      print("No se pudo procesar", fallas, "sumas")
-
+"""
 
 
