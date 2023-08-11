@@ -2,8 +2,16 @@
 
 count=0 #contador de operaciones suma
 from decimal import Decimal
-import re
 
+'''
+Funcion(a,b)
+---------------
+a: Descripcion del parametro
+b: Descripcion del parametro
+----------------------------
+return: Que retorna 
+
+'''
 
 def binario_int(num):
     decimal =0
@@ -119,39 +127,39 @@ def buscar_uno(num):
         
         if (i == "0" or i =="."):
             cont+=1
+
         else:
             return cont - 2
-        
+    return 0
+
 def binario_a_ieee754(numero):
     
     cont = 0
     aux = numero[0]
-    #print(float(numero))
+    
 
     if float(numero) > 0:
         ss = "0"
     else:
         ss = "1"
-        #print("Buenas")
+       
         
         numero = numero[1:]
-        #print(numero)
-
+      
     pos_punto = buscar_punto(numero)
 
     if pos_punto == 0: #cuando no hay punto
         pos_punto = len(numero)
     e = pos_punto - 1
     
-    #print(aux)
+   
     if (aux == "0" or aux=="-"):       #busca el primer 1
         cont= buscar_uno(numero)
         e = -cont-1
-   
+  
     nuevo_numero = numero[0] + "." + numero[1:pos_punto] + numero[pos_punto+1:]
     
     if(e<0):
-
         mantissa= nuevo_numero[-e+2:]
     else:
         mantissa = nuevo_numero[2:]
@@ -176,8 +184,6 @@ def binario_a_ieee754(numero):
     if (len(numero_ieee754)>32):
         numero_ieee754= numero_ieee754[:32]
 
-    
-    print(numero_ieee754[:1],numero_ieee754[1:9],numero_ieee754[9:])
 
     return numero_ieee754
         
@@ -260,11 +266,30 @@ with open('operaciones.txt','r') as archivo:
 
     for linea in archivo:
         linea = linea.strip().split(";")
-        
         if(len(linea)>=2):
             temp1 = (linea[0])
             temp2 = (linea[1])
-            if(temp1!="" and temp2!= ""):
+
+            if(float(temp1) == 0.0):
+                
+                temp2=float(temp2)
+                num2=decimal_a_binario(temp2)
+                num2=binario_a_ieee754(num2)
+                count += 1
+                string_salida = str(round(ieee754_a_decimal(num2),3)) + "/" + num2
+                lista_escribir.append(string_salida)
+            
+            elif(float(temp2) == 0.0):
+
+                temp1=float(temp1)
+                num1=decimal_a_binario(temp1)
+                num1=binario_a_ieee754(num1)
+                count += 1
+                string_salida = str(round(ieee754_a_decimal(num1),3)) + "/" + num1
+                lista_escribir.append(string_salida)
+
+
+            elif(temp1!="" and temp2!= ""):
 
                 temp1 = float(linea[0])
                 temp2 = float(linea[1])
@@ -277,7 +302,7 @@ with open('operaciones.txt','r') as archivo:
 
                     resultado = sum(num1,num2)
                     count += 1
-                    string_salida = str(round(ieee754_a_decimal(resultado),3)) + "/" + resultado[:1]+" "+resultado[1:9]+" "+resultado[9:]
+                    string_salida = str(round(ieee754_a_decimal(resultado),3)) + "/" + resultado
                     lista_escribir.append(string_salida)
                                 
                 else:
@@ -288,14 +313,12 @@ with open('operaciones.txt','r') as archivo:
             else:
                 fallas+=1
 
-        else:
-            fallas+=1
 
 with open('resultados.txt','w') as archivo:
    for i in lista_escribir:
        archivo.write(i+"\n")
 
-"""
+
 if(count+fallas==0):
     print("No se pudieron procesar lineas")
 
@@ -313,6 +336,5 @@ if (fallas==0):
 
 else:
      print("No se pudo procesar", fallas, "sumas")
-"""
 
 
