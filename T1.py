@@ -103,16 +103,15 @@ def sum(num1, num2):
             e = binario_int(e2)
         else:
             e = binario_int(e2)+1
-
-
+            
     e = decimal_a_binario(e)
-    
+    while len(e) < 8:
+        e = "0" + e
     mantissa = result[2:]
     while len(mantissa) < 23:
         mantissa += "0"
-    
     final = sig1 + e + mantissa
-    
+
     return final 
 
 def buscar_uno(num):
@@ -177,7 +176,7 @@ def binario_a_ieee754(numero):
         numero_ieee754= numero_ieee754[:32]
 
     
-    print(numero_ieee754[:1],numero_ieee754[1:9],numero_ieee754[9:])
+    #print(numero_ieee754[:1],numero_ieee754[1:9],numero_ieee754[9:])
 
     return numero_ieee754
 
@@ -278,7 +277,7 @@ with open('operaciones.txt','r') as archivo:
             string_salida= str(round(temp1,3)) + "/" + num1 + ";" + str(round(temp2,3)) + "/" + num2 
             lista_escribir.append(string_salida)
 
-'''
+
 with open('resultados.txt','w') as archivo:
    for i in lista_escribir:
        archivo.write(i+"\n")
@@ -302,5 +301,5 @@ if (fallas==0):
 else:
      print("No se pudo procesar", fallas, "sumas")
 
-'''
+
 
