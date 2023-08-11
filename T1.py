@@ -112,7 +112,7 @@ def sum(num1, num2):
         mantissa += "0"
     final = sig1 + e + mantissa
 
-    return final 
+    return final[:32] 
 
 def buscar_uno(num):
     cont=0
@@ -123,8 +123,6 @@ def buscar_uno(num):
         else:
             return cont - 2
         
-   
-
 def binario_a_ieee754(numero):
     
     cont = 0
@@ -179,7 +177,6 @@ def binario_a_ieee754(numero):
     #print(numero_ieee754[:1],numero_ieee754[1:9],numero_ieee754[9:])
 
     return numero_ieee754
-
         
 def decimal_a_binario(numero):
     binario = ""
@@ -247,7 +244,6 @@ def ieee754_a_decimal(numero):
     numero2 = (2**exponente) * sum * (-1)**int(s1)
     return numero2
 
-
 fallas=0
 lista_escribir=[]
 
@@ -290,7 +286,7 @@ else:
     print("Se pudieron procesar", count+fallas, "lineas")
 
 if (count==0):
-    print("No fue posible hacer sumar :C")
+    print("No fue posible hacer sumas")
 
 else:
     print("Fue posible hacer", count,"sumas")
