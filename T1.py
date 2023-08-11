@@ -43,7 +43,6 @@ def sum(num1, num2):
     
     if (binario_int(e1)>binario_int(e2)): # e1 mayor a e1, por lo tanto se debe mover e2 a la izquierda
        
-    
         m2= "1."+m2 #num2 menor #1.1 -> 0.11 
         pos_punto=buscar_punto(m2)
         cantidad_decimales=  binario_int(e1)-binario_int(e2) #me muevo a la izquierda
@@ -52,7 +51,6 @@ def sum(num1, num2):
 
     elif (binario_int(e2)>binario_int(e1)): #el mayor es e1 e2 x lo tanto se debe mover el e1 a la izquierda compare veces
         
-
         m1= "1."+m1 
         pos_punto = buscar_punto(m1)  
         cantidad_decimales=  binario_int(e2)-binario_int(e1) #me muevo a la izquierda
@@ -152,7 +150,6 @@ def binario_a_ieee754(numero):
         mantissa= nuevo_numero[-e+2:]
     else:
         mantissa = nuevo_numero[2:]
-    
 
     while len(mantissa) < 23:
         mantissa += "0"
@@ -192,7 +189,7 @@ def decimal_a_binario(numero):
     if(parte_entera==0):
         binario="0"
     parte_decimal = numero - parte_entera
-    aux= parte_decimal
+    aux= parte_entera
     while parte_entera > 0:
         if parte_entera % 2 != 0:
             binario = "1" + binario 
@@ -214,10 +211,27 @@ def decimal_a_binario(numero):
             else:
                 p_d_b += "0"
             cont_digitos += 1
-       
-        numero_binario = signo + binario + "." + p_d_b
         
-        return (numero_binario)
+        if aux != 0:
+       
+            numero_binario = signo + binario + "." + p_d_b
+            return (numero_binario)
+        else:
+            #en este caso le agrego mas numeros a la mantissa para que no falten numeros al shiftear
+            while cont_digitos < 23 + 10:
+                parte_decimal = parte_decimal * 2
+                parte_decimal=round(parte_decimal,5)
+        
+                if parte_decimal >= 1:
+                    p_d_b += "1"
+                    parte_decimal -= 1
+                else:
+                    p_d_b += "0"
+                cont_digitos += 1
+            numero_binario = signo + binario + "." + p_d_b
+            
+            return (numero_binario)
+
     
     else:
         numero_binario = signo +  binario
@@ -286,6 +300,7 @@ with open('operaciones.txt','r') as archivo:
 with open('resultados.txt','w') as archivo:
    for i in lista_escribir:
        archivo.write(i+"\n")
+
 
 if(count+fallas==0):
     print("No se pudieron procesar lineas")
