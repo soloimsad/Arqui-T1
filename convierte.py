@@ -133,9 +133,11 @@ def buscar_uno(num):
     return 0
 
 def binario_a_ieee754(numero):
-    
     cont = 0
     aux = numero[0]
+    #agregue este if para fixear, poniendo lo mismo dentro del if de abajo fallaba otro caso xd
+    if aux == "-" and numero[1] == "0":
+        aux = "0"
     
 
     if float(numero) > 0:
@@ -147,13 +149,11 @@ def binario_a_ieee754(numero):
         numero = numero[1:]
       
     pos_punto = buscar_punto(numero)
-
     if pos_punto == 0: #cuando no hay punto
         pos_punto = len(numero)
     e = pos_punto - 1
-    
-   
-    if (aux == "0" or aux=="-"):       #busca el primer 1
+
+    if aux == "0":     #busca el primer 1
         cont= buscar_uno(numero)
         e = -cont-1
   
@@ -183,8 +183,6 @@ def binario_a_ieee754(numero):
 
     if (len(numero_ieee754)>32):
         numero_ieee754= numero_ieee754[:32]
-
-
     return numero_ieee754
         
 def decimal_a_binario(numero):
@@ -217,7 +215,8 @@ def decimal_a_binario(numero):
         else:
             n = 10
 
-        while cont_digitos < 23 + n:
+        #agregue lo que esta en el and
+        while cont_digitos < 23 + n and parte_decimal != 0:
             parte_decimal = parte_decimal * 2
             parte_decimal=round(parte_decimal,5)
         
@@ -228,7 +227,6 @@ def decimal_a_binario(numero):
                 p_d_b += "0"
             cont_digitos += 1
         
-       
         numero_binario = signo + binario + "." + p_d_b
     
         return (numero_binario)
